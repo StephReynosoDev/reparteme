@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Reparteme.infraestructura/">
+    <Project Path="Reparteme.infraestructura/Reparteme.Infraestructura.csproj" />
+  </Folder>
+  <Project Path="Reparteme.Api/Reparteme.Api.csproj" />
+  <Project Path="Reparteme.Dominio/Reparteme.Dominio.csproj" />
+</Solution>
