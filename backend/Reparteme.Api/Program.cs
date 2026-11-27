@@ -14,6 +14,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
    options.UseSqlite(connectionString));
 
 builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
+builder.Services.AddScoped<IProductoRepositorio, ProductoRepositorio>();
 
 var app = builder.Build();
 
