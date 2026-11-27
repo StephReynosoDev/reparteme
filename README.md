@@ -104,7 +104,7 @@ No requiere configuracion adicional. La base de datos SQLite se crea automaticam
 ### Reporte de Consumo
 - Vista general de todos los productos
 - Total de entradas y salidas por producto
-- Stock actual con indicador visual de stock negativo
+- Stock actual de cada producto
 
 
 ### Manejo de Errores
@@ -118,10 +118,12 @@ No requiere configuracion adicional. La base de datos SQLite se crea automaticam
 | Metodo | Ruta | Descripcion |
 |--------|------|-------------|
 | GET | `/api/categorias` | Listar todas las categorias |
+| GET | `/api/categorias/{id}` | Obtener una categoria por id |
 | POST | `/api/categorias` | Crear categoria |
 | PUT | `/api/categorias/{id}` | Actualizar categoria |
 | DELETE | `/api/categorias/{id}` | Eliminar categoria |
 | GET | `/api/productos` | Listar todos los productos |
+| GET | `/api/productos/{id}` | Obtener un producto por id |
 | POST | `/api/productos` | Crear producto |
 | PUT | `/api/productos/{id}` | Actualizar producto |
 | DELETE | `/api/productos/{id}` | Eliminar producto |
@@ -147,11 +149,13 @@ Cada funcionalidad se desarrollo en su propia rama `feature/` y se integro media
 
 | Rama | Descripcion |
 |------|-------------|
-| `feature/estructura-inicial` | Estructura del proyecto, entidades y DbContext |
-| `feature/crud-categorias` | CRUD completo de categorias |
-| `feature/crud-productos` | CRUD completo de productos |
-| `feature/movimientos-reporte` | Movimientos de inventario y reporte de consumo |
+| `feature/setup-proyecto` | Estructura inicial del proyecto, entidades y DbContext |
+| `feature/categorias` | CRUD completo de categorias |
+| `feature/productos` | CRUD completo de productos |
+| `feature/movimientos` | Registro de entradas y salidas de inventario |
+| `feature/reporte-consumo` | Reporte de consumo por producto |
 | `feature/correccion-errores` | Rediseno del frontend, validaciones y manejo de errores |
+| `feature/documentacion` | Correccion del README y limpieza de archivos de configuracion |
 
 
 ### Flujo de integracion
@@ -168,5 +172,5 @@ Las ramas de feature **no se eliminan** despues del merge para mantener la traza
 
 ## Autor
 
-**Stephen Reynoso** — Estudiante de Desarrollo de Software, ITLA
+**Stephen Reynoso** 
 - GitHub: [@StephReynosoDev](https://github.com/StephReynosoDev)
