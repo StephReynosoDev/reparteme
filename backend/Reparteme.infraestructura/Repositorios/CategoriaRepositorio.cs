@@ -17,7 +17,11 @@ public class CategoriaRepositorio : ICategoriaRepositorio
     public async Task<List<Categoria>> ObtenerTodas()
     {
         return await _context.Categorias.ToListAsync();
+    }
 
+    public async Task<Categoria?> ObtenerPorId(Guid id)
+    {
+        return await _context.Categorias.FindAsync(id);
     }
 
     public async Task Crear(Categoria categoria)
@@ -30,7 +34,6 @@ public class CategoriaRepositorio : ICategoriaRepositorio
     {
         _context.Categorias.Update(categoria);
         await _context.SaveChangesAsync();
-
     }
 
     public async Task Eliminar(Categoria categoria)
