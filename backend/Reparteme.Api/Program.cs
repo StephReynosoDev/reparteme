@@ -1,14 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using Reparteme.Infraestructura.Persistencia;
+using Reparteme.Dominio.Interfaces;
+using Reparteme.Infraestructura.Repositorios;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
-   ??builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+   
+   builder.Services.AddDbContext<AppDbContext>(options =>
+   options.UseSqlite(connectionString));
+
+builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
+
 var app = builder.Build();
+
 
 app.UseStaticFiles();
 app.MapControllers();
