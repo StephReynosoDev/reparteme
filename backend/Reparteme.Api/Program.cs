@@ -6,9 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
-   ??builder.Configuration.GetConnectionString("DefaultConnection");
-var app = builder.Build();
+var connectionString = builder.Configuration.GetConnectionString("DATABASE_URL");
+   
+   builder.Services.AddDbContext<AppDbContext>(options =>
+   options.UseSqlite(connectionString));
 
 app.UseStaticFiles();
 app.MapControllers();
