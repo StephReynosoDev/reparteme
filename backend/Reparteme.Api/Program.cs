@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Reparteme.Infraestructura.Persistencia;
 using Reparteme.Dominio.Interfaces;
 using Reparteme.Infraestructura.Repositorios;
-
+using Reparteme.Infraestructura.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +18,13 @@ builder.Services.AddScoped<IProductoRepositorio, ProductoRepositorio>();
 builder.Services.AddScoped<IMovimientoRepositorio, MovimientoRepositorio>();
 
 var app = builder.Build();
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await SeedData.Inicializar(context);
+}
 
 
 app.UseStaticFiles();
