@@ -5,149 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos - Reparteme</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <nav class="bg-blue-600 text-white p-4">
-        <div class="flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Reparteme</h1>
-            <a href="index.html" class="hover:underline">Inicio</a>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="navbar">
+        <a href="index.html" class="navbar-logo">
+            <img src="img/logo.png" alt="Reparteme">
+        </a>
+        <div class="navbar-links">
+            <a href="categorias.html">Categorias</a>
+            <a href="productos.html" class="activo">Productos</a>
+            <a href="movimientos.html">Movimientos</a>
+            <a href="reporte.html">Reporte</a>
         </div>
     </nav>
 
-    <main class="container mx-auto p-4">
-        <h2 class="text-xl font-bold mb-4">Productos</h2>
+    <main class="max-w-6xl mx-auto px-4 py-6">
+        <h2 class="seccion-titulo">Productos</h2>
 
-        <form id="formProducto" class="bg-white p-4 rounded shadow mb-6">
-            <input type="hidden" id="productoId">
-            <div class="mb-3">
-                <label class="block text-sm font-medium mb-1">Nombre</label>
-                <input type="text" id="nombre" class="w-full border rounded p-2" required>
-            </div>
-            <div class="mb-3">
-                <label class="block text-sm font-medium mb-1">Descripcion</label>
-                <input type="text" id="descripcion" class="w-full border rounded p-2">
-            </div>
-            <div class="mb-3">
-                <label class="block text-sm font-medium mb-1">Foto (URL)</label>
-                <input type="text" id="foto" class="w-full border rounded p-2">
-            </div>
-            <div class="mb-3">
-                <label class="block text-sm font-medium mb-1">Cantidad</label>
-                <input type="number" id="cantidad" class="w-full border rounded p-2" required>
-            </div>
-            <div class="mb-3">
-                <label class="block text-sm font-medium mb-1">Categoria</label>
-                <select id="categoriaId" class="w-full border rounded p-2" required></select>
-            </div>
-            <div class="flex gap-2">
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Guardar</button>
-                <button type="button" id="btnCancelar" class="bg-gray-400 text-white px-4 py-2 rounded hidden">Cancelar</button>
-            </div>
-        </form>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <div class="card">
+                    <h3 class="card-titulo" id="formTitulo">Nuevo Producto</h3>
+                    <form id="formProducto">
+                        <input type="hidden" id="productoId">
+                        <div class="campo">
+                            <label class="label">Nombre</label>
+                            <input type="text" id="nombre" class="input" required>
+                        </div>
+                        <div class="campo">
+                            <label class="label">Descripcion</label>
+                            <input type="text" id="descripcion" class="input">
+                        </div>
+                        <div class="campo">
+                            <label class="label">Foto (URL)</label>
+                            <input type="text" id="foto" class="input">
+                        </div>
+                        <div class="campo">
+                            <label class="label">Cantidad</label>
+                            <input type="number" id="cantidad" class="input" min="0" max="999999" required>
+                        </div>
+                        <div class="campo">
+                            <label class="label">Categoria</label>
+                            <select id="categoriaId" class="input" required></select>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="submit" class="btn btn-primario">Guardar</button>
+                            <button type="button" id="btnCancelar" class="btn btn-gris hidden">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
 
-        <table class="w-full bg-white rounded shadow">
-            <thead class="bg-gray-200">
-                <tr>
-                    <th class="p-3 text-left">Nombre</th>
-                    <th class="p-3 text-left">Categoria</th>
-                    <th class="p-3 text-left">Cantidad</th>
-                    <th class="p-3 text-left">Estado</th>
-                    <th class="p-3 text-left">Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tablaProductos"></tbody>
-        </table>
+                <div class="card">
+                    <h3 class="card-titulo">Buscar</h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="buscar" placeholder="Nombre..." class="input">
+                        <button onclick="buscar()" class="btn btn-verde">Buscar</button>
+                    </div>
+                    <button onclick="cargar()" class="btn-texto-azul mt-2" style="font-size:0.85rem;">Ver todos</button>
+                </div>
+            </div>
+
+            <div class="md:col-span-2">
+                <div class="card">
+                    <h3 class="card-titulo">Listado</h3>
+                    <div class="tabla-container">
+                        <table class="tabla">
+                            <thead>
+                                <tr>
+                                    <th>Foto</th>
+                                    <th>Nombre</th>
+                                    <th>Categoria</th>
+                                    <th>Cantidad</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaProductos"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <script>
-        const API = '/api/productos';
+    <div id="modal" class="modal-overlay hidden">
+        <div class="modal-contenido">
+            <p id="modalMensaje"></p>
+            <div class="modal-botones">
+                <button id="modalConfirmar" class="btn btn-primario">Confirmar</button>
+                <button id="modalCancelar" class="btn btn-gris">Cancelar</button>
+            </div>
+        </div>
+    </div>
 
-        async function cargarCategorias() {
-            const res = await fetch('/api/categorias');
-            const datos = await res.json();
-            const select = document.getElementById('categoriaId');
-            select.innerHTML = datos.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
-        }
-
-        async function cargar() {
-            const res = await fetch(API);
-            const datos = await res.json();
-            const tabla = document.getElementById('tablaProductos');
-            tabla.innerHTML = datos.map(p => `
-                <tr class="border-t">
-                    <td class="p-3">${p.nombre}</td>
-                    <td class="p-3">${p.categoriaNombre}</td>
-                    <td class="p-3">${p.cantidadActual}</td>
-                    <td class="p-3">${p.activo ? 'Activo' : 'Inactivo'}</td>
-                    <td class="p-3">
-                        <button onclick="editar('${p.id}')" class="text-blue-600 mr-2">Editar</button>
-                        <button onclick="eliminar('${p.id}')" class="text-red-600">Eliminar</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        document.getElementById('formProducto').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('productoId').value;
-            const datos = {
-                nombre: document.getElementById('nombre').value,
-                descripcion: document.getElementById('descripcion').value,
-                foto: document.getElementById('foto').value,
-                cantidadActual: parseInt(document.getElementById('cantidad').value),
-                categoriaId: document.getElementById('categoriaId').value
-            };
-
-            if (id) {
-                datos.activo = true;
-                await fetch(`${API}/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(datos)
-                });
-            } else {
-                await fetch(API, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(datos)
-                });
-            }
-            limpiar();
-            cargar();
-        });
-
-        async function editar(id) {
-            const res = await fetch(`${API}/${id}`);
-            const p = await res.json();
-            document.getElementById('productoId').value = p.id;
-            document.getElementById('nombre').value = p.nombre;
-            document.getElementById('descripcion').value = p.descripcion;
-            document.getElementById('foto').value = p.foto;
-            document.getElementById('cantidad').value = p.cantidadActual;
-            document.getElementById('categoriaId').value = p.categoriaId;
-            document.getElementById('btnCancelar').classList.remove('hidden');
-        }
-
-        async function eliminar(id) {
-            if (confirm('Eliminar este producto?')) {
-                await fetch(`${API}/${id}`, { method: 'DELETE' });
-                cargar();
-            }
-        }
-
-        function limpiar() {
-            document.getElementById('productoId').value = '';
-            document.getElementById('nombre').value = '';
-            document.getElementById('descripcion').value = '';
-            document.getElementById('foto').value = '';
-            document.getElementById('cantidad').value = '';
-            document.getElementById('btnCancelar').classList.add('hidden');
-        }
-
-        document.getElementById('btnCancelar').addEventListener('click', limpiar);
-
-        cargarCategorias();
-        cargar();
-    </script>
+    <script src="js/productos.js"></script>
 </body>
 </html>
