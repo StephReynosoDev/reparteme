@@ -5,119 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categorias - Reparteme</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <nav class="bg-blue-600 text-white p-4">
-        <div class="flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Reparteme</h1>
-            <a href="index.html" class="hover:underline">Inicio</a>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="navbar">
+        <a href="index.html" class="navbar-logo">
+            <img src="img/logo.png" alt="Reparteme">
+        </a>
+        <div class="navbar-links">
+            <a href="categorias.html" class="activo">Categorias</a>
+            <a href="productos.html">Productos</a>
+            <a href="movimientos.html">Movimientos</a>
+            <a href="reporte.html">Reporte</a>
         </div>
     </nav>
 
-    <main class="container mx-auto p-4">
-        <h2 class="text-xl font-bold mb-4">Categorias</h2>
+    <main class="max-w-5xl mx-auto px-4 py-6">
+        <h2 class="seccion-titulo">Categorias</h2>
 
-        <form id="formCategoria" class="bg-white p-4 rounded shadow mb-6">
-            <input type="hidden" id="categoriaId">
-            <div class="mb-3">
-                <label class="block text-sm font-medium mb-1">Nombre</label>
-                <input type="text" id="nombre" class="w-full border rounded p-2" required>
-            </div>
-            <div class="mb-3">
-                <label class="block text-sm font-medium mb-1">Descripcion</label>
-                <input type="text" id="descripcion" class="w-full border rounded p-2">
-            </div>
-            <div class="flex gap-2">
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Guardar</button>
-                <button type="button" id="btnCancelar" class="bg-gray-400 text-white px-4 py-2 rounded hidden">Cancelar</button>
-            </div>
-        </form>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <div class="card">
+                    <h3 class="card-titulo" id="formTitulo">Nueva Categoria</h3>
+                    <form id="formCategoria">
+                        <input type="hidden" id="categoriaId">
+                        <div class="campo">
+                            <label class="label">Nombre</label>
+                            <input type="text" id="nombre" class="input" required>
+                        </div>
+                        <div class="campo">
+                            <label class="label">Descripcion</label>
+                            <input type="text" id="descripcion" class="input">
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="submit" class="btn btn-primario">Guardar</button>
+                            <button type="button" id="btnCancelar" class="btn btn-gris hidden">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
 
-        <table class="w-full bg-white rounded shadow">
-            <thead class="bg-gray-200">
-                <tr>
-                    <th class="p-3 text-left">Nombre</th>
-                    <th class="p-3 text-left">Descripcion</th>
-                    <th class="p-3 text-left">Estado</th>
-                    <th class="p-3 text-left">Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tablaCategorias"></tbody>
-        </table>
+                <div class="card">
+                    <h3 class="card-titulo">Buscar</h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="buscar" placeholder="Nombre..." class="input">
+                        <button onclick="buscar()" class="btn btn-verde">Buscar</button>
+                    </div>
+                    <button onclick="cargar()" class="btn-texto-azul mt-2" style="font-size:0.85rem;">Ver todas</button>
+                </div>
+            </div>
+
+            <div class="md:col-span-2">
+                <div class="card">
+                    <h3 class="card-titulo">Listado</h3>
+                    <div class="tabla-container">
+                        <table class="tabla">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripcion</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaCategorias"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <script>
-        const API = '/api/categorias';
+    <div id="modal" class="modal-overlay hidden">
+        <div class="modal-contenido">
+            <p id="modalMensaje"></p>
+            <div class="modal-botones">
+                <button id="modalConfirmar" class="btn btn-primario">Confirmar</button>
+                <button id="modalCancelar" class="btn btn-gris">Cancelar</button>
+            </div>
+        </div>
+    </div>
 
-        async function cargar() {
-            const res = await fetch(API);
-            const datos = await res.json();
-            const tabla = document.getElementById('tablaCategorias');
-            tabla.innerHTML = datos.map(c => `
-                <tr class="border-t">
-                    <td class="p-3">${c.nombre}</td>
-                    <td class="p-3">${c.descripcion}</td>
-                    <td class="p-3">${c.activa ? 'Activa' : 'Inactiva'}</td>
-                    <td class="p-3">
-                        <button onclick="editar('${c.id}')" class="text-blue-600 mr-2">Editar</button>
-                        <button onclick="eliminar('${c.id}')" class="text-red-600">Eliminar</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        document.getElementById('formCategoria').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('categoriaId').value;
-            const datos = {
-                nombre: document.getElementById('nombre').value,
-                descripcion: document.getElementById('descripcion').value
-            };
-
-            if (id) {
-                datos.activa = true;
-                await fetch(`${API}/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(datos)
-                });
-            } else {
-                await fetch(API, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(datos)
-                });
-            }
-            limpiar();
-            cargar();
-        });
-
-        async function editar(id) {
-            const res = await fetch(`${API}/${id}`);
-            const c = await res.json();
-            document.getElementById('categoriaId').value = c.id;
-            document.getElementById('nombre').value = c.nombre;
-            document.getElementById('descripcion').value = c.descripcion;
-            document.getElementById('btnCancelar').classList.remove('hidden');
-        }
-
-        async function eliminar(id) {
-            if (confirm('Eliminar esta categoria?')) {
-                await fetch(`${API}/${id}`, { method: 'DELETE' });
-                cargar();
-            }
-        }
-
-        function limpiar() {
-            document.getElementById('categoriaId').value = '';
-            document.getElementById('nombre').value = '';
-            document.getElementById('descripcion').value = '';
-            document.getElementById('btnCancelar').classList.add('hidden');
-        }
-
-        document.getElementById('btnCancelar').addEventListener('click', limpiar);
-
-        cargar();
-    </script>
+    <script src="js/categorias.js"></script>
 </body>
 </html>

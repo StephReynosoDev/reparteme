@@ -5,18 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reparteme</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <nav class="bg-blue-600 text-white p-4">
-        <h1 class="text-2xl font-bold">Reparteme</h1>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="navbar">
+        <a href="index.html" class="navbar-logo">
+            <img src="img/logo.png" alt="Reparteme">
+        </a>
+        <div class="navbar-links">
+            <a href="categorias.html">Categorias</a>
+            <a href="productos.html">Productos</a>
+            <a href="movimientos.html">Movimientos</a>
+            <a href="reporte.html">Reporte</a>
+        </div>
     </nav>
-        <main class="container mx-auto p-4">
-        <h2 class="text-xl">Bienvenido a Reparteme</h2>
-        <p class="mt-2 text-gray-600">Sistema de inventario para distribucion de productos.</p>
-        <div class="mt-4">
-             <a href="categorias.html" class="bg-blue-600 text-white px-4 py-2 rounded">Categorias</a>
-            <a href="productos.html" class="bg-green-600 text-white px-4 py-2 rounded">Productos</a>
-            <a href="movimientos.html" class="bg-orange-600 text-white px-4 py-2 rounded">Movimientos</a>
+
+    <main class="max-w-5xl mx-auto px-4 py-12">
+        <div class="text-center mb-10">
+            <img src="img/logo.png" alt="Reparteme" class="mx-auto mb-4" style="height: 120px;">
+            <p class="text-gray-500 text-lg">Sistema de inventario para distribucion de productos</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <a href="categorias.html" class="card text-center hover:shadow-md transition-shadow">
+                <div class="text-3xl mb-2">📁</div>
+                <div class="font-semibold text-gray-700">Categorias</div>
+                <div class="text-sm text-gray-400 mt-1">Gestionar categorias</div>
+            </a>
+            <a href="productos.html" class="card text-center hover:shadow-md transition-shadow" style="text-decoration:none;">
+                <div class="text-3xl mb-2">📦</div>
+                <div class="font-semibold text-gray-700">Productos</div>
+                <div class="text-sm text-gray-400 mt-1">Inventario actual</div>
+            </a>
+            <a href="movimientos.html" class="card text-center hover:shadow-md transition-shadow" style="text-decoration:none;">
+                <div class="text-3xl mb-2">🔄</div>
+                <div class="font-semibold text-gray-700">Movimientos</div>
+                <div class="text-sm text-gray-400 mt-1">Entradas y salidas</div>
+            </a>
+            <a href="reporte.html" class="card text-center hover:shadow-md transition-shadow" style="text-decoration:none;">
+                <div class="text-3xl mb-2">📊</div>
+                <div class="font-semibold text-gray-700">Reporte</div>
+                <div class="text-sm text-gray-400 mt-1">Consumo general</div>
+            </a>
         </div>
     </main>
 </body>

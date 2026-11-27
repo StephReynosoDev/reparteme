@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte - Reparteme</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="navbar">
+        <a href="index.html" class="navbar-logo">
+            <img src="img/logo.png" alt="Reparteme">
+        </a>
+        <div class="navbar-links">
+            <a href="categorias.html">Categorias</a>
+            <a href="productos.html">Productos</a>
+            <a href="movimientos.html">Movimientos</a>
+            <a href="reporte.html" class="activo">Reporte</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <h2 class="seccion-titulo">Reporte de Consumo</h2>
+
+        <div class="card">
+            <div class="tabla-container">
+                <table class="tabla">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Entradas</th>
+                            <th>Salidas</th>
+                            <th>Stock Actual</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaReporte"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/reporte.js"></script>
+</body>
+</html>

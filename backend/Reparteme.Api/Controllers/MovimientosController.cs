@@ -41,12 +41,16 @@ public class MovimientosController : ControllerBase
         var producto = await _productoRepo.ObtenerPorId(request.ProductoId);
         if (producto == null) return NotFound("Producto no encontrado");
 
+        if (request.Cantidad < 1)
+            return BadRequest("La cantidad debe ser mayor a 0.");
+
         var movimiento = new MovimientoInventario
         {
             ProductoId = request.ProductoId,
             Cantidad = request.Cantidad,
             Tipo = request.Tipo,
-            Motivo = request.Motivo
+            Motivo = request.Motivo,
+            FechaCreacion = DateTime.UtcNow
         };
 
         switch (request.Tipo)
@@ -55,6 +59,8 @@ public class MovimientosController : ControllerBase
                 producto.CantidadActual += request.Cantidad;
                 break;
             case Dominio.Enums.TipoMovimiento.Salida:
+                if (producto.CantidadActual < request.Cantidad)
+                    return BadRequest($"Stock insuficiente. Solo hay {producto.CantidadActual} unidades de {producto.Nombre}.");
                 producto.CantidadActual -= request.Cantidad;
                 break;
         }

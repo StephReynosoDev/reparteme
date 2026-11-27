@@ -22,6 +22,13 @@ public class ProductoRepositorio : IProductoRepositorio
     public async Task<Producto?> ObtenerPorId(Guid id)
     {
         return await _context.Productos.Include(p => p.Categoria).FirstOrDefaultAsync(p => p.Id == id);
+
+    }
+
+
+    public async Task<Producto?> ObtenerPorNombre(string nombre)
+   {
+    return await _context.Productos.FirstOrDefaultAsync(p => p.Nombre.ToLower() == nombre.ToLower());
     }
 
     public async Task Crear(Producto producto)

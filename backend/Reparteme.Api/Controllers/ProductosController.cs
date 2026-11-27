@@ -57,6 +57,10 @@ public class ProductosController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ProductoResponse>> Crear(CrearProductoRequest request)
     {
+        var existente = await _repositorio.ObtenerPorNombre(request.Nombre);
+        if (existente != null)
+            return BadRequest($"Ya existe un producto con el nombre '{request.Nombre}'.");
+
         var producto = new Producto
         {
             Nombre = request.Nombre,
