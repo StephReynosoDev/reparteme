@@ -44,6 +44,36 @@ namespace Reparteme.Infraestructura.Migrations
                     b.ToTable("Categorias", (string)null);
                 });
 
+            modelBuilder.Entity("Reparteme.Dominio.Entidades.MovimientoInventario", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Motivo")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProductoId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("Movimientos", (string)null);
+                });
+
             modelBuilder.Entity("Reparteme.Dominio.Entidades.Producto", b =>
                 {
                     b.Property<Guid>("Id")
@@ -82,6 +112,17 @@ namespace Reparteme.Infraestructura.Migrations
                     b.HasIndex("CategoriaId");
 
                     b.ToTable("Productos", (string)null);
+                });
+
+            modelBuilder.Entity("Reparteme.Dominio.Entidades.MovimientoInventario", b =>
+                {
+                    b.HasOne("Reparteme.Dominio.Entidades.Producto", "Producto")
+                        .WithMany()
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("Reparteme.Dominio.Entidades.Producto", b =>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movimientos - Reparteme</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Reparteme</h1>
+            <a href="index.html" class="hover:underline">Inicio</a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4">
+        <h2 class="text-xl font-bold mb-4">Registrar Movimiento</h2>
+
+        <form id="formMovimiento" class="bg-white p-4 rounded shadow mb-6">
+            <div class="mb-3">
+                <label class="block text-sm font-medium mb-1">Producto</label>
+                <select id="productoId" class="w-full border rounded p-2" required></select>
+            </div>
+            <div class="mb-3">
+                <label class="block text-sm font-medium mb-1">Cantidad</label>
+                <input type="number" id="cantidad" class="w-full border rounded p-2" min="1" required>
+            </div>
+            <div class="mb-3">
+                <label class="block text-sm font-medium mb-1">Tipo</label>
+                <select id="tipo" class="w-full border rounded p-2">
+                    <option value="0">Entrada</option>
+                    <option value="1">Salida</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="block text-sm font-medium mb-1">Motivo</label>
+                <input type="text" id="motivo" class="w-full border rounded p-2">
+            </div>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Registrar</button>
+        </form>
+
+        <h3 class="text-lg font-bold mb-2">Historial</h3>
+        <table class="w-full bg-white rounded shadow">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="p-3 text-left">Producto</th>
+                    <th class="p-3 text-left">Tipo</th>
+                    <th class="p-3 text-left">Cantidad</th>
+                    <th class="p-3 text-left">Motivo</th>
+                    <th class="p-3 text-left">Fecha</th>
+                </tr>
+            </thead>
+            <tbody id="tablaMovimientos"></tbody>
+        </table>
+    </main>
+
+    <script>
+        const API = '/api/movimientos';
+
+        async function cargarProductos() {
+            const res = await fetch('/api/productos');
+            const datos = await res.json();
+            const select = document.getElementById('productoId');
+            select.innerHTML = datos.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('');
+        }
+
+        async function cargar() {
+            const res = await fetch(API);
+            const datos = await res.json();
+            const tabla = document.getElementById('tablaMovimientos');
+            tabla.innerHTML = datos.map(m => `
+                <tr class="border-t">
+                    <td class="p-3">${m.productoNombre}</td>
+                    <td class="p-3">${m.tipo}</td>
+                    <td class="p-3">${m.cantidad}</td>
+                    <td class="p-3">${m.motivo}</td>
+                    <td class="p-3">${new Date(m.fechaCreacion).toLocaleString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        document.getElementById('formMovimiento').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const datos = {
+                productoId: document.getElementById('productoId').value,
+                cantidad: parseInt(document.getElementById('cantidad').value),
+                tipo: parseInt(document.getElementById('tipo').value),
+                motivo: document.getElementById('motivo').value
+            };
+            await fetch(API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            });
+            document.getElementById('cantidad').value = '';
+            document.getElementById('motivo').value = '';
+            cargar();
+        });
+
+        cargarProductos();
+        cargar();
+    </script>
+</body>
+</html>
